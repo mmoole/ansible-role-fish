@@ -3,7 +3,7 @@ Role Name
 [![license][2i]][2p]
 [![twitter][3i]][3p]
 
-A role to install fish (2.2) and fisher
+This is a fork of the role to install fish (2.2) and fisher originally made by [Alejandro Baez][1]
 
 Description
 -----------
@@ -14,29 +14,38 @@ It is pretty barren for now except with those two options...
 Role Variables
 --------------
 
-There are two variables:
+There are these variables with default values:
 
 ``` yaml
-user.home # the $HOME to have the shell be used in
-user.name # the $USER for the shell to be used in
+# user to add fish shell to and its path
+user:
+  name: "{{ ansible_user_id }}"
+  home: "/home/{{ ansible_user_id }}"
+
+# option to replace shell or append to bash shell
+fish_append_to_bash: false
+
+fish_fisherman_packages:
+  - paths
+  - edc/bass
+  - nyarly/fish-bang-bang
 ```
 
 Requirements
 ------------
 
-The role requires the [abaez.common][6] role to run properly. This is the only requirement with the variables that need to be changed.
+Needs git installed on remote machine, this is not checked for!
 
 
 Usage
 -----
 
-To use the role, you need to give become access for the user you want to have the shell be installed and configured for. You also need to add the [abaez.common][6] for the role to function. An example can be seen below:
+To use the role, you need to give become access for the user you want to have the shell be installed and configured for. An example can be seen below:
 
 ``` yaml
 - hosts: servers
     roles:
-        - abaez.common
-        - abaez.fish
+        - ansible-role-fish
 ```
 
 Author Information

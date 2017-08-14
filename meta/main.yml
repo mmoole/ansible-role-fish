@@ -52,4 +52,4 @@ galaxy_info:
     - fish
 
 dependencies:
-  - abaez.common
+#  - abaez.common

@@ -1,4 +1,14 @@
 ---
+# user to add fish shell to and its path
 user:
-  name: lo
-  home: /home/lo
+  name: "{{ ansible_user_id }}"
+  home: "/home/{{ ansible_user_id }}"
+
+# option to replace shell or append to bash shell
+fish_append_to_bash: false
+
+fish_fisherman_packages:
+  - paths
+  - edc/bass
+  - nyarly/fish-bang-bang
+  - ansible-completion

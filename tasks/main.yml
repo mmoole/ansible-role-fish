@@ -10,25 +10,38 @@
     mode=0755
     recurse=yes
 
-- name: install fisherman
+- block:
+  - name: install fisherman
+    get_url:
+      url="{{ item.url }}"
+      dest="{{ item.dest }}"
+    with_items:
+      - {url: "https://git.io/fisherman", dest: "{{ user.home }}/.config/fish/functions/fisher.fish"}
+    #  - {url: "https://git.io/snippet", dest: "{{user.home}}/.config/fish/config.fish"}
+
+  - name: install fisherman addons
+    command: /usr/bin/fish -c 'fisher {{ item }}'
+    register: fisherman_out
+    changed_when: "'Installing' in fisherman_out.stderr"
+    failed_when: "'error' in fisherman_out.stderr"
+    with_items:
+      - "{{ fish_fisherman_packages }}"
+
+  - name: append fish shell to .bashrc if chosen to do so
+    lineinfile:
+      path: ~/.bashrc
+      line: exec fish
+      insertafter: EOF
+      create: yes
+      state: present
+    when: fish_append_to_bash
+
+  # run this whole block as:
   become: yes
   become_user: "{{ user.name }}"
-  get_url:
-    url="{{ item.url }}"
-    dest="{{ item.dest }}"
-  with_items:
-    - {url: "https://git.io/fisherman", dest: "{{ user.home }}/.config/fish/functions/fisher.fish"}
-    - {url: "https://git.io/snippet", dest: "{{user.home}}/.config/fish/config.fish"}
 
-- name: install bass
-  become: yes
-  become_user: "{{ user.name }}"
-  command: /usr/bin/fish -c 'fisher eds/bass paths'
-
-
-
-
-- name: change the shell to fish
+- name: change the shell to fish if chosen to do so
   user:
     name="{{ user.name }}"
     shell=/usr/bin/fish
+  when: not fish_append_to_bash

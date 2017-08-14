@@ -22,13 +22,17 @@ user:
   name: "{{ ansible_user_id }}"
   home: "/home/{{ ansible_user_id }}"
 
-# option to replace shell or append to bash shell
+# option to set activation for fish shell - or leave installed to use only on demand
+fish_shell_activate: true
+
+# option to replace shell or append to bash shell - only if activation is set to true
 fish_append_to_bash: false
 
 fish_fisherman_packages:
   - paths
   - edc/bass
   - nyarly/fish-bang-bang
+  - ansible-completion
 ```
 
 Requirements

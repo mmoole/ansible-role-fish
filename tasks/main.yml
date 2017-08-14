@@ -8,7 +8,7 @@
     state=directory
     owner="{{ user.name }}"
     mode=0755
-    recurse=yes
+    #recurse=yes
 
 - block:
   - name: install fisherman
@@ -19,11 +19,12 @@
       - {url: "https://git.io/fisherman", dest: "{{ user.home }}/.config/fish/functions/fisher.fish"}
     #  - {url: "https://git.io/snippet", dest: "{{user.home}}/.config/fish/config.fish"}
 
+    # the following task is not really idempotent
   - name: install fisherman addons
     command: /usr/bin/fish -c 'fisher {{ item }}'
     register: fisherman_out
     changed_when: "'Installing' in fisherman_out.stderr"
-    failed_when: "'error' in fisherman_out.stderr"
+    #failed_when: "'error' in fisherman_out.stderr"
     with_items:
       - "{{ fish_fisherman_packages }}"
 
@@ -34,7 +35,9 @@
       insertafter: EOF
       create: yes
       state: present
-    when: fish_append_to_bash
+    when:
+    - fish_append_to_bash
+    - fish_shell_activate
 
   # run this whole block as:
   become: yes
@@ -44,4 +47,6 @@
   user:
     name="{{ user.name }}"
     shell=/usr/bin/fish
-  when: not fish_append_to_bash
+  when:
+   - not fish_append_to_bash
+   - fish_shell_activate

@@ -28,6 +28,13 @@
     with_items:
       - "{{ fish_fisherman_packages }}"
 
+  - name: copy configuration file
+    copy:
+      content: '{{ fish_config }}'
+      dest: ~/.config/fish/config.fish
+      mode: '0644'
+    when: fish_config is defined
+
   - name: append fish shell to .bashrc if chosen to do so
     lineinfile:
       path: ~/.bashrc
@@ -42,6 +49,7 @@
   # run this whole block as:
   become: yes
   become_user: "{{ user.name }}"
+  become_method: su
 
 - name: change the shell to fish if chosen to do so
   user:

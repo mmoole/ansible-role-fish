@@ -28,18 +28,26 @@ fish_shell_activate: true
 # option to replace shell or append to bash shell - only if activation is set to true
 fish_append_to_bash: false
 
+# set fisherman packages to install
 fish_fisherman_packages:
   - paths
   - edc/bass
   - nyarly/fish-bang-bang
   - ansible-completion
+
+# set fish configuraton file
+#fish_config: |
+  # fish configuration file {{ ansible_managed }}
+
+
+# or set it to lookup your file
+# fish_config: "{{ lookup('file', '../../../templates/config.fish') }}"
 ```
 
 Requirements
 ------------
 
 Needs git installed on remote machine, this is not checked for!
-
 
 Usage
 -----
@@ -51,6 +59,12 @@ To use the role, you need to give become access for the user you want to have th
     roles:
         - ansible-role-fish
 ```
+
+Useful
+------
+
+  * See http://fishshell.com/ for more information and documentation.
+  * set full path in prompt per entering ```set -U fish_prompt_pwd_dir_length 0```
 
 Author Information
 ------------------

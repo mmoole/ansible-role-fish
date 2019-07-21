@@ -1,8 +1,8 @@
 ---
 - name: installing os centric piece first
-  include: "os_family/{{ ansible_os_family }}.yml"
+  include_tasks: "os_family/{{ ansible_os_family }}.yml"
 
-- name: make the fisherman directory
+- name: make the fisher package manager directory
   file:
     path="{{ user.home }}/.config/fish/functions"
     state=directory
@@ -11,22 +11,22 @@
     #recurse=yes
 
 - block:
-  - name: install fisherman
+  - name: install fisher package manager
     get_url:
       url="{{ item.url }}"
       dest="{{ item.dest }}"
     with_items:
-      - {url: "https://git.io/fisherman", dest: "{{ user.home }}/.config/fish/functions/fisher.fish"}
-    #  - {url: "https://git.io/snippet", dest: "{{user.home}}/.config/fish/config.fish"}
+      - {url: "https://git.io/fisher", dest: "{{ user.home }}/.config/fish/functions/fisher.fish"}
 
     # the following task is not really idempotent
-  - name: install fisherman addons
-    command: /usr/bin/fish -c 'fisher {{ item }}'
+  - name: install fisher package manager addons
+    command: /usr/bin/fish -c 'fisher add {{ item }}'
     register: fisherman_out
-    changed_when: "'Installing' in fisherman_out.stderr"
-    #failed_when: "'error' in fisherman_out.stderr"
+    changed_when: "'added' in fisherman_out.stderr"
+    failed_when: "'cannot' in fisherman_out.stderr"
     with_items:
       - "{{ fish_fisherman_packages }}"
+    when: fish_fisherman_packages
 
   - name: copy configuration file
     copy:

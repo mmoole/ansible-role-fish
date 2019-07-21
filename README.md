@@ -1,9 +1,9 @@
-Role Name
+Ansible Role Fish
 =========
 [![license][2i]][2p]
 [![twitter][3i]][3p]
 
-This is a fork of the role to install fish (2.2) and fisher originally made by [Alejandro Baez][1]
+This is a fork of an [Ansible role][7] to install fish and fisher,  originally made by [Alejandro Baez][1]
 
 Description
 -----------
@@ -28,12 +28,19 @@ fish_shell_activate: true
 # option to replace shell or append to bash shell - only if activation is set to true
 fish_append_to_bash: false
 
-# set fisherman packages to install
+# set the major version of fish to be installed, this is not used by all package managers
+fish_major_version: 3
+
+# set fisher package manager packages to install (formerly known as fisherman)
+# you can also install packages from https://github.com/oh-my-fish
+# see also: https://github.com/jorgebucaran/fisher
 fish_fisherman_packages:
-  - paths
   - edc/bass
   - nyarly/fish-bang-bang
-  - ansible-completion
+  - nyarly/fish-lookup
+  - laughedelic/pisces
+  - jbonjean/re-search
+  - jorgebucaran/fish-bax
 
 # set fish configuraton file
 #fish_config: |
@@ -79,3 +86,4 @@ Author Information
 [4]: http://fishshell.com/
 [5]: https://github.com/fisherman/fisherman
 [6]: https://galaxy.ansible.com/abaez/common
+[7]: https://github.com/abaez/ansible-role-fish

@@ -1,21 +1,27 @@
 ---
 - name: install fish repo on Fedora
   get_url:
-    url="http://download.opensuse.org/repositories/shells:fish:release:2/Fedora_{{ ansible_distribution_release }}/shells:fish:release:2.repo"
+    url="https://download.opensuse.org/repositories/shells:fish:release:{{ fish_major_version }}/Fedora_{{ ansible_distribution_release }}/shells:fish:release:3.repo"
     dest=/etc/yum.repos.d/fish.repo
   when: ansible_distribution == "Fedora"
 
 - name: install fish repo on Centos
   get_url:
-    url="http://download.opensuse.org/repositories/shells:fish:release:2/CentOS_{{ ansible_distribution_major_version }}/shells:fish:release:2.repo"
+    url="https://download.opensuse.org/repositories/shells:fish:release:{{ fish_major_version }}/RHEL_{{ ansible_distribution_major_version }}/shells:fish:release:3.repo"
     dest=/etc/yum.repos.d/fish.repo
   when: ansible_distribution == "CentOS"
 
 - name: install fish repo on RedHat
   get_url:
-    url="http://download.opensuse.org/repositories/shells:fish:release:2/RHEL_7/shells:fish:release:2.repo"
+    url="https://download.opensuse.org/repositories/shells:fish:release:{{ fish_major_version }}/RHEL_7/shells:fish:release:3.repo"
     dest=/etc/yum.repos.d/fish.repo
   when: ansible_distribution == "RedHat"
+
+- name: install fish repo on Oracle Linux
+  get_url:
+    url="https://download.opensuse.org/repositories/shells:fish:release:{{ fish_major_version }}/RedHat_RHEL-6/shells:fish:release:3.repo"
+    dest=/etc/yum.repos.d/fish.repo
+  when: ansible_distribution == "OracleLinux"
 
 - name: install fish with yum
   yum: name={{ item }} state=present

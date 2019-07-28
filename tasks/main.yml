@@ -22,11 +22,11 @@
   - name: install fisher package manager addons
     command: /usr/bin/fish -c 'fisher add {{ item }}'
     register: fisherman_out
-    changed_when: "'added' in fisherman_out.stderr"
-    failed_when: "'cannot' in fisherman_out.stderr"
+    changed_when: fisherman_out.stderr is regex(".*(added|removed)\ .*")
+    failed_when: fisherman_out.stderr is regex(".*(cannot|invalid|unknown)\ .*")
     with_items:
       - "{{ fish_fisherman_packages }}"
-    when: fish_fisherman_packages
+    when: fish_fisherman_packages is defined
 
   - name: copy configuration file
     copy:
